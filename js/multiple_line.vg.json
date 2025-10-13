@@ -1,0 +1,197 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "vconcat": [
+    {
+      "title": "ASEAN GDP per Capita Trends (2000-2024)",
+      "description": "Malaysia's growth trajectory compared to other ASEAN countries",
+      "width": 800,
+      "height": 500,
+      "data": {
+        "url": "https://raw.githubusercontent.com/henryma0722/3179c2/main/data/merged_economic_data.csv"
+      },
+      "layer": [
+        {
+          "transform": [
+            {
+              "fold": ["GDP_2000", "GDP_2001", "GDP_2002", "GDP_2003", "GDP_2004", "GDP_2005", "GDP_2006", "GDP_2007", "GDP_2008", "GDP_2009", "GDP_2010", "GDP_2011", "GDP_2012", "GDP_2013", "GDP_2014", "GDP_2015", "GDP_2016", "GDP_2017", "GDP_2018", "GDP_2019", "GDP_2020", "GDP_2021", "GDP_2022", "GDP_2023", "GDP_2024"],
+              "as": ["Year_GDP", "GDP"]
+            },
+            {
+              "fold": ["POP_2000", "POP_2001", "POP_2002", "POP_2003", "POP_2004", "POP_2005", "POP_2006", "POP_2007", "POP_2008", "POP_2009", "POP_2010", "POP_2011", "POP_2012", "POP_2013", "POP_2014", "POP_2015", "POP_2016", "POP_2017", "POP_2018", "POP_2019", "POP_2020", "POP_2021", "POP_2022", "POP_2023", "POP_2024"],
+              "as": ["Year_POP", "Population"]
+            },
+            {
+              "calculate": "split(datum.Year_GDP, '_')[1]",
+              "as": "Year"
+            },
+            {
+              "calculate": "split(datum.Year_POP, '_')[1]",
+              "as": "Year_Pop"
+            },
+            {
+              "filter": "datum.Year == datum.Year_Pop"
+            },
+            {
+              "calculate": "datum.GDP / datum.Population",
+              "as": "GDP_per_capita"
+            },
+            {
+              "filter": "datum['Country Name'] == 'Malaysia' || datum['Country Name'] == 'Vietnam' || datum['Country Name'] == 'Thailand' || datum['Country Name'] == 'Singapore' || datum['Country Name'] == 'Indonesia' || datum['Country Name'] == 'Philippines' || datum['Country Name'] == 'Myanmar' || datum['Country Name'] == 'Cambodia' || datum['Country Name'] == 'Laos' || datum['Country Name'] == 'Brunei'"
+            },
+            {
+              "calculate": "toNumber(datum.Year)",
+              "as": "Year_num"
+            }
+          ],
+          "encoding": {
+            "x": {
+              "field": "Year_num",
+              "type": "ordinal",
+              "title": "Year",
+              "axis": {"labelAngle": -45}
+            },
+            "y": {
+              "field": "GDP_per_capita",
+              "type": "quantitative",
+              "title": "GDP per Capita (US$)",
+              "axis": {"format": "$,.0f"}
+            },
+            "color": {
+              "field": "Country Name",
+              "type": "nominal",
+              "scale": {
+                "domain": ["Malaysia", "Vietnam", "Thailand", "Singapore", "Indonesia", "Philippines", "Myanmar", "Cambodia", "Laos", "Brunei"],
+                "range": ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#ffff33", "#a65628", "#f781bf", "#999999", "#66c2a5"]
+              },
+              "legend": {
+                "title": "ASEAN Countries",
+                "orient": "right"
+              }
+            },
+            "strokeWidth": {
+              "condition": [
+                {
+                  "test": "datum['Country Name'] == 'Malaysia'",
+                  "value": 3
+                },
+                {
+                  "test": "datum['Country Name'] == 'Vietnam'", 
+                  "value": 2
+                }
+              ],
+              "value": 1
+            },
+            "opacity": {
+              "condition": [
+                {
+                  "test": "datum['Country Name'] == 'Malaysia' || datum['Country Name'] == 'Vietnam'",
+                  "value": 1
+                }
+              ],
+              "value": 0.6
+            },
+            "tooltip": [
+              {"field": "Country Name", "type": "nominal", "title": "Country"},
+              {"field": "Year", "type": "nominal", "title": "Year"},
+              {"field": "GDP_per_capita", "type": "quantitative", "title": "GDP per Capita", "format": "$,.2f"},
+              {"field": "GDP", "type": "quantitative", "title": "Total GDP", "format": "$,.0f"},
+              {"field": "Population", "type": "quantitative", "title": "Population", "format": ",.0f"}
+            ]
+          },
+          "mark": {
+            "type": "line",
+            "point": {
+              "filled": false,
+              "fill": "white",
+              "strokeWidth": 1
+            }
+          }
+        },
+        {
+          "data": {
+            "values": [
+              {"Year": 2020, "label": "COVID-19 Impact"},
+              {"Year": 2009, "label": "Global Financial Crisis"}
+            ]
+          },
+          "layer": [
+            {
+              "mark": {
+                "type": "rule",
+                "color": "red",
+                "strokeWidth": 2,
+                "strokeDash": [4, 4]
+              },
+              "encoding": {
+                "x": {"field": "Year", "type": "ordinal"},
+                "color": {
+                  "condition": {
+                    "test": "datum.Year == 2020",
+                    "value": "red"
+                  },
+                  "value": "orange"
+                }
+              }
+            },
+            {
+              "mark": {
+                "type": "text",
+                "align": "right",
+                "baseline": "top",
+                "dx": -5,
+                "dy": -5,
+                "fontSize": 12,
+                "fontWeight": "bold"
+              },
+              "encoding": {
+                "x": {"field": "Year", "type": "ordinal"},
+                "text": {
+                  "condition": {
+                    "test": "datum.Year == 2020",
+                    "value": "COVID-19"
+                  },
+                  "value": "GFC"
+                },
+                "color": {
+                  "condition": {
+                    "test": "datum.Year == 2020",
+                    "value": "red"
+                  },
+                  "value": "orange"
+                }
+              }
+            },
+            {
+              "mark": {
+                "type": "text",
+                "align": "right",
+                "baseline": "top",
+                "dx": -5,
+                "dy": 10,
+                "fontSize": 10
+              },
+              "encoding": {
+                "x": {"field": "Year", "type": "ordinal"},
+                "text": {
+                  "condition": {
+                    "test": "datum.Year == 2020",
+                    "value": "GDP Drop"
+                  },
+                  "value": "Economic Crisis"
+                },
+                "color": {
+                  "condition": {
+                    "test": "datum.Year == 2020",
+                    "value": "red"
+                  },
+                  "value": "orange"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "config": {}
+}
