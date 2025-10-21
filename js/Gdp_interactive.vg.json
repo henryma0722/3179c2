@@ -2,17 +2,8 @@
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "params": [
     {
-      "name": "continent_filter",
-      "bind": {
-        "input": "select",
-        "options": [null, "Asia", "Europe", "Africa", "North America", "South America", "Oceania"],
-        "labels": ["All Continents", "Asia", "Europe", "Africa", "North America", "South America", "Oceania"],
-        "name": "Filter by Continent: "
-      }
-    },
-    {
       "name": "min_gdp",
-      "value": 13000,
+      "value": 0,
       "bind": {
         "input": "range",
         "min": 0,
@@ -25,7 +16,7 @@
   "vconcat": [
     {
       "width": 800,
-      "height": 600,
+      "height": 500,
       "title": "Global Economic Analysis: GDP per Capita vs Population",
       "data": {
         "url": "https://raw.githubusercontent.com/henryma0722/3179c2/main/data/merged_economic_data.csv"
@@ -35,15 +26,11 @@
           "calculate": "datum.GDP_2022 / datum.POP_2022",
           "as": "GDP_per_capita"
         },
+        {"filter": "datum.GDP_per_capita > min_gdp"},
         {
-          "filter": "datum.GDP_per_capita > min_gdp"
+          "filter": "datum['Country Name'] == 'Malaysia' || datum['Country Name'] == 'Thailand' || datum['Country Name'] == 'Singapore' || datum['Country Name'] == 'Indonesia'  || datum['Country Name'] == 'Viet Nam' || datum['Country Name'] == 'Philippines' || datum['Country Name'] == 'Myanmar' || datum['Country Name'] == 'Cambodia' || datum['Country Name'] == 'Laos' || datum['Country Name'] == 'Brunei Darussalam'"
         },
-        {
-          "filter": "continent_filter == null || datum.Continent == continent_filter"
-        },
-        {
-          "filter": "datum.GDP_2022 > 0 && datum.POP_2022 > 0"
-        }
+        {"filter": "datum.GDP_2022 > 0 && datum.POP_2022 > 0"}
       ],
       "encoding": {
         "x": {
@@ -52,7 +39,14 @@
           "title": "Population",
           "axis": {
             "format": ".0s",
-            "values": [1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000000, 10000000000000]
+            "values": [
+              1000,
+              10000,
+              100000,
+              1000000,
+              10000000,
+              100000000
+            ]
           },
           "scale": {"type": "log"}
         },
@@ -72,61 +66,49 @@
           "mark": "circle",
           "encoding": {
             "size": {
-            "field": "GDP_2022",
-            "type": "quantitative",
-            "title": "Total GDP (US$)",
-            "scale": {
-              "type": "log",
-              "range": [10, 500]  
-            },
-            "legend": {
-              "format": "$.2s",
-              "values": [
-                10000000000,   
-                100000000000,  
-                1000000000000,
-                10000000000000
-              ]
-            }
-          },
-            "color": {
-              "field": "Continent",
-              "type": "nominal",
-              "title": "Continent",
-              "scale": {
-                "domain": ["Asia", "Europe", "Africa", "North America", "South America", "Oceania"],
-                "range": ["#e41a1c", "#984ea3", "#ff7f00", "#a6cee3", "#377eb8", "#a65628"]
+              "field": "POP_2022",
+              "type": "quantitative",
+              "title": "Population",
+              "scale": {"type": "log", "range": [50, 2000]},
+              "legend": {
+                "format": ".0s",
+                "values": [
+                  1000000,
+                  10000000,
+                  100000000
+                ]
+                
               }
+            },
+            "color": {
+              "field": "Country Name",
+              "type": "nominal",
+              "title": "Country"
+              
             },
             "opacity": {"value": 0.6},
             "tooltip": [
               {"field": "Country Name", "type": "nominal", "title": "Country"},
               {"field": "Continent", "type": "nominal", "title": "Continent"},
-              {"field": "POP_2022", "type": "quantitative", "title": "Population", "format": ","},
-              {"field": "GDP_2022", "type": "quantitative", "title": "Total GDP", "format": "$,.0f"},
-              {"field": "GDP_per_capita", "type": "quantitative", "title": "GDP per Capita", "format": "$,.0f"}
-            ]
-          }
-        },
-        {
-          "mark": {
-            "type": "text",
-            "align": "left",
-            "baseline": "middle",
-            "dx": 8,
-            "fontSize": 10,
-            "fontWeight": "bold"
-          },
-          "encoding": {
-            "text": {"field": "Country Name", "type": "nominal"},
-            "color": {"value": "black"},
-            "opacity": {
-              "condition": {
-                "test": "datum['Country Name'] == 'United States' || datum['Country Name'] == 'China' || datum['Country Name'] == 'India' || datum['Country Name'] == 'Luxembourg' || datum['Country Name'] == 'Singapore' || datum['Country Name'] == 'Australia'",
-                "value": 1
+              {
+                "field": "POP_2022",
+                "type": "quantitative",
+                "title": "Population",
+                "format": ","
               },
-              "value": 0
-            }
+              {
+                "field": "GDP_2022",
+                "type": "quantitative",
+                "title": "Total GDP",
+                "format": "$,.0f"
+              },
+              {
+                "field": "GDP_per_capita",
+                "type": "quantitative",
+                "title": "GDP per Capita",
+                "format": "$,.0f"
+              }
+            ]
           }
         }
       ]
