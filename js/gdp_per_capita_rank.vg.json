@@ -1,7 +1,24 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "title": "ASEAN GDP per Capita Ranking (2024)",
-  "width": 800,
+  "params": [
+    {
+      "name": "year",
+      "value": 2024,
+      "bind": {
+        "input": "range",
+        "min": 2000,
+        "max": 2024,
+        "step": 1,
+        "name": "Select Year: "
+      }
+    }
+  ],
+  "title": {
+    "text": {
+      "expr": "'ASEAN GDP per Capita Ranking (' + year + ')'"
+    }
+  },
+  "width": 1190,
   "data": {
     "url": "https://raw.githubusercontent.com/henryma0722/3179c2/main/data/merged_economic_data.csv"
   },
@@ -10,7 +27,23 @@
       "filter": "datum['Country Name'] == 'Malaysia' || datum['Country Name'] == 'Thailand' || datum['Country Name'] == 'Singapore' || datum['Country Name'] == 'Indonesia' || datum['Country Name'] == 'Philippines' || datum['Country Name'] == 'Myanmar' || datum['Country Name'] == 'Cambodia' || datum['Country Name'] == 'Laos' || datum['Country Name'] == 'Brunei Darussalam'"
     },
     {
-      "calculate": "datum.GDP_2024 / datum.POP_2024",
+      "calculate": "'GDP_' + year",
+      "as": "gdp_field"
+    },
+    {
+      "calculate": "'POP_' + year",
+      "as": "pop_field"
+    },
+    {
+      "calculate": "datum[datum.gdp_field]",
+      "as": "current_gdp"
+    },
+    {
+      "calculate": "datum[datum.pop_field]",
+      "as": "current_pop"
+    },
+    {
+      "calculate": "datum.current_gdp / datum.current_pop",
       "as": "GDP_per_capita"
     },
     {
@@ -29,8 +62,27 @@
       "field": "GDP_per_capita",
       "type": "quantitative",
       "title": "GDP per Capita (US$)",
+      "scale": {
+        "domain": [
+          0,
+          100000
+        ]
+      },
       "axis": {
-        "format": "$,.0f"
+        "format": "$,.0f",
+        "values": [
+          0,
+          10000,
+          20000,
+          30000,
+          40000,
+          50000,
+          60000,
+          70000,
+          80000,
+          90000,
+          100000
+        ]
       }
     },
     "color": {
@@ -53,13 +105,13 @@
         "format": "$,.2f"
       },
       {
-        "field": "GDP_2024",
+        "field": "current_gdp",
         "type": "quantitative",
         "title": "Total GDP",
         "format": "$,.0f"
       },
       {
-        "field": "POP_2024",
+        "field": "current_pop",
         "type": "quantitative",
         "title": "Population",
         "format": ",.0f"
@@ -68,3 +120,4 @@
   },
   "config": {}
 }
+
