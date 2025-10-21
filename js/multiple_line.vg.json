@@ -127,9 +127,9 @@
                 "color": {
                   "condition": {
                     "test": "datum.Year == 2020",
-                    "value": "red"
+                    "value": "grey"
                   },
-                  "value": "orange"
+                  "value": "grey"
                 }
               }
             },
@@ -155,9 +155,9 @@
                 "color": {
                   "condition": {
                     "test": "datum.Year == 2020",
-                    "value": "red"
+                    "value": "grey"
                   },
-                  "value": "orange"
+                  "value": "grey"
                 }
               }
             },
@@ -182,9 +182,9 @@
                 "color": {
                   "condition": {
                     "test": "datum.Year == 2020",
-                    "value": "red"
+                    "value": "grey"
                   },
-                  "value": "orange"
+                  "value": "grey"
                 }
               }
             }
