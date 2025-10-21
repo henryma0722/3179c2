@@ -36,7 +36,7 @@
               "as": "GDP_per_capita"
             },
             {
-              "filter": "datum['Country Name'] == 'Malaysia' || datum['Country Name'] == 'Vietnam' || datum['Country Name'] == 'Thailand' || datum['Country Name'] == 'Singapore' || datum['Country Name'] == 'Indonesia' || datum['Country Name'] == 'Philippines' || datum['Country Name'] == 'Myanmar' || datum['Country Name'] == 'Cambodia' || datum['Country Name'] == 'Laos' || datum['Country Name'] == 'Brunei'"
+              "filter": "datum['Country Name'] == 'Malaysia' || datum['Country Name'] == 'Vietnam' || datum['Country Name'] == 'Thailand' || datum['Country Name'] == 'Singapore' || datum['Country Name'] == 'Indonesia' || datum['Country Name'] == 'Philippines' || datum['Country Name'] == 'Myanmar' || datum['Country Name'] == 'Cambodia' || datum['Country Name'] == 'Laos' || datum['Country Name'] == 'Brunei Darussalam'"
             },
             {
               "calculate": "toNumber(datum.Year)",
@@ -60,7 +60,7 @@
               "field": "Country Name",
               "type": "nominal",
               "scale": {
-                "domain": ["Malaysia", "Vietnam", "Thailand", "Singapore", "Indonesia", "Philippines", "Myanmar", "Cambodia", "Laos", "Brunei"],
+                "domain": ["Malaysia", "Thailand", "Singapore", "Indonesia", "Philippines", "Myanmar", "Cambodia", "Viet Nam", "Brunei Darussalam"],
                 "range": ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#ffff33", "#a65628", "#f781bf", "#999999", "#66c2a5"]
               },
               "legend": {
