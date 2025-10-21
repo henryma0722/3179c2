@@ -27,6 +27,15 @@
     .section{margin-bottom:40px;background:#fff;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.05);padding:25px}
     .section-title{font-family:'Merriweather',serif;font-size:1.8rem;font-weight:700;color:#2c3e50;margin-bottom:15px;padding-bottom:10px;border-bottom:2px solid #3498db}
     .section-description{font-family:'Source Sans Pro',sans-serif;color:#555;margin-bottom:20px;font-size:1rem}
+    /* Added a sub-title style for individual map headings */
+    .map-subtitle {
+        font-family: 'Merriweather', serif;
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #333;
+        margin-top: 25px;
+        margin-bottom: 10px;
+    }
     .vis-container{width:100%;margin:0 auto}
     .footer{text-align:center;margin-top:40px;padding-top:20px;border-top:1px solid #e0e0e0;color:#7f8c8d;font-size:.9rem}
     .data-source{font-style:italic;margin-top:10px;font-size:.85rem}
@@ -35,8 +44,10 @@
       font-family: 'Merriweather', serif !important;
     }
     @media(max-width:768px){.page{padding:10px}.header h1{font-size:2rem}.section{padding:15px}.section-title{font-size:1.5rem}}
-    /* small container sizing so vega embeds look good responsively */
-    #vis1, #vis2, #vis3{min-height:360px}
+    
+    /* --- THIS IS THE CORRECTED LINE --- */
+    /* The min-height now only applies to the larger charts */
+    #vis1, #vis-gdp, #vis-pop, #vis2, #vis3 {min-height:360px}
   </style>
 </head>
 <body>
@@ -47,11 +58,25 @@
       <p>including GDP distribution and economic performance across countries and continents. </p>
     </div>
 
+    <!-- SECTION 1: Three maps -->
     <div class="section" style="text-align:center">
-      <h2 class="section-title">Global GDP per Capita Distribution (2022)</h2>
-      <p class="section-description">This choropleth map shows GDP per capita across countries,<br> normalized by population. Countries in gray indicate missing data.<br> Use the tooltips for detailed information.</p>
+      <h2 class="section-title">Global Economic & Population Overview</h2>
+
+      <!-- Map 1: GDP per Capita (Original) -->
+      <p class="section-description">This map shows GDP per capita (total GDP divided by population).<br> Countries in gray indicate missing data.</p>
       <div id="vis1" class="vis-container"></div>
+
+      <!-- Map 2: Total GDP (New) -->
+      <!-- Added inline style to reduce spacing -->
+      <p class="section-description" style="margin-top: 30px; margin-bottom: 5px;">This map shows the total GDP for each country.</p>
+      <div id="vis-gdp" class="vis-container"></div>
+
+      <!-- Map 3: Total Population (New) -->
+      <!-- Added inline style to reduce spacing -->
+      <p class="section-description" style="margin-top: 30px; margin-bottom: 5px;">This map shows the total population for each country.</p>
+      <div id="vis-pop" class="vis-container"></div>
     </div>
+    <!-- END OF SECTION 1 -->
 
     <div class="section" style="text-align:center">
       <h2 class="section-title">How do ASEAN countries balance population size and total GDP?</h2>
@@ -59,14 +84,27 @@
       <div id="vis2" class="vis-container"></div>
     </div>
 
+    <!-- UPDATED SECTION 3: Now contains three line charts -->
     <div class="section" style="text-align:center">
       <h2 class="section-title">Is Malaysia’s economic growth keeping pace with population growth?</h2>
+      
+      <!-- Chart 1: Multiple Line Chart -->
       <p class="section-description">This multi-line chart tracks GDP per capita growth across ASEAN countries,<br> highlighting Malaysia's trajectory compared to regional peers. </p>
-      <ul class="section-description" style="margin-left: 20px;">
-      </ul>
       <p class="section-description">Vertical lines mark major economic disruptions: the 2009 Global Financial Crisis and 2020 COVID-19 pandemic.</p>
       <div id="vis3" class="vis-container"></div>
+
+      <!-- Chart 2: Malaysia GDP vs Population (New) -->
+      <!-- Added inline style to reduce spacing -->
+      <p class="section-description" style="margin-top: 30px; margin-bottom: 5px;">This chart focuses on Malaysia, comparing its total GDP growth to its population growth over time.</p>
+      <div id="vis-mys-gdp-pop" class="vis-container"></div>
+      
+      <!-- Chart 3: Malaysia Population (New) -->
+      <!-- Added inline style to reduce spacing -->
+      <p class="section-description" style="margin-top: 30px; margin-bottom: 5px;">This chart shows the growth of Malaysia's population from 2000 to 2024.</p>
+      <div id="vis-mys-pop" class="vis-container"></div>
+
     </div>
+    <!-- END OF UPDATED SECTION 3 -->
 
     <div class="footer">
       <p>&copy; 2025 FIT3179 Data Visualisation | Created by Henry Ma</p>
@@ -77,16 +115,32 @@
   <script>
     // Embed all specs without error handling
     (async function embedAll() {
-      const specVis1Url = "https://raw.githubusercontent.com/henryma0722/3179c2/main/js/empty_data_map.vg.json";
-      const specVis2Url = "https://raw.githubusercontent.com/henryma0722/3179c2/main/js/Gdp_interactive.vg.json";
-      const specVis3Url = "https://raw.githubusercontent.com/henryma0722/3179c2/main/js/multiple_line.vg.json";
+      // Base URL for your JSON files
+      const baseUrl = "https://raw.githubusercontent.com/henryma0722/3179c2/main/js/";
 
+      // URLs for all visualizations
+      const specVis1Url = baseUrl + "empty_data_map.vg.json";
+      const specVisGdpUrl = baseUrl + "gdp_map.vg.json";
+      const specVisPopUrl = baseUrl + "pop_map.vg.json"; 
+      
+      const specVis2Url = baseUrl + "Gdp_interactive.vg.json";
+
+      const specVis3Url = baseUrl + "multiple_line.vg.json";
+      const specVisMysGdpPopUrl = baseUrl + "mys_gdp.vg.json"; // Changed from mys_gdp_pop.vg.json
+      const specVisMysPopUrl = baseUrl + "mys_pop.vg.json"; 
+
+      // Embed all charts
       await Promise.all([
         vegaEmbed('#vis1', specVis1Url, { actions: false }),
+        vegaEmbed('#vis-gdp', specVisGdpUrl, { actions: false }),
+        vegaEmbed('#vis-pop', specVisPopUrl, { actions: false }),
         vegaEmbed('#vis2', specVis2Url, { actions: false }),
-        vegaEmbed('#vis3', specVis3Url, { actions: false })
+        vegaEmbed('#vis3', specVis3Url, { actions: false }),
+        vegaEmbed('#vis-mys-gdp-pop', specVisMysGdpPopUrl, { actions: false }),
+        vegaEmbed('#vis-mys-pop', specVisMysPopUrl, { actions: false })
       ]);
     })();
   </script>
 </body>
 </html>
+
