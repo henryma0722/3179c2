@@ -4,7 +4,7 @@
     {
       "title": "ASEAN GDP per Capita Trends (2000-2024)",
       "description": "Malaysia's growth trajectory compared to other ASEAN countries",
-      "width": 800,
+      "width": 1235,
       "height": 500,
       "data": {
         "url": "https://raw.githubusercontent.com/henryma0722/3179c2/main/data/merged_economic_data.csv"
