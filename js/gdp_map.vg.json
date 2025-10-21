@@ -16,7 +16,7 @@
   "vconcat": [
     {
       "title": {"text": "Global Gross Domestic Product (GDP)"},
-      "width": 800,
+      "width": 1300,
       "height": 500,
       "data": {
         "url": "https://raw.githubusercontent.com/henryma0722/3179/main/js/ne_110m_admin_0_countries.topojson",
