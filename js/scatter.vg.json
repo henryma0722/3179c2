@@ -1,0 +1,98 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "GDP vs Population Growth Rate",
+  "width": 800,
+  "height": 500,
+  "data": {
+    "url": "https://raw.githubusercontent.com/henryma0722/3179c2/main/data/merged_economic_data.csv"
+  },
+  "params": [
+    {
+      "name": "year_slider",
+      "value": 2024,
+      "bind": {
+        "input": "range",
+        "min": 2001,
+        "max": 2024,
+        "step": 1,
+        "name": "Select Year: "
+      }
+    }
+  ],
+  "transform": [
+    {
+      "filter": "datum['Country Name'] == 'Malaysia' || datum['Country Name'] == 'Thailand' || datum['Country Name'] == 'Singapore' || datum['Country Name'] == 'Indonesia' || datum['Country Name'] == 'Philippines' || datum['Country Name'] == 'Myanmar' || datum['Country Name'] == 'Cambodia' || datum['Country Name'] == 'Laos' || datum['Country Name'] == 'Brunei Darussalam'"
+    },
+    {
+      "calculate": "datum['GDP_' + year_slider]",
+      "as": "current_gdp"
+    },
+    {
+      "calculate": "datum['GDP_' + (year_slider - 1)]",
+      "as": "prev_gdp"
+    },
+    {
+      "calculate": "(datum.current_gdp - datum.prev_gdp) / datum.prev_gdp",
+      "as": "gdp_growth_rate"
+    },
+    {
+      "calculate": "datum['POP_' + year_slider]",
+      "as": "current_pop"
+    },
+    {
+      "calculate": "datum['POP_' + (year_slider - 1)]",
+      "as": "prev_pop"
+    },
+    {
+      "calculate": "(datum.current_pop - datum.prev_pop) / datum.prev_pop",
+      "as": "pop_growth_rate"
+    },
+    {
+      "calculate": "datum.current_gdp / datum.current_pop",
+      "as": "gdp_per_capita"
+    },
+    {
+      "filter": "datum.gdp_growth_rate != null && datum.pop_growth_rate != null && datum.gdp_per_capita != null"
+    }
+  ],
+  "mark": {
+    "type": "point",
+    "filled": true,
+    "opacity": 0.5
+  },
+  "encoding": {
+    "x": {
+      "field": "pop_growth_rate",
+      "type": "quantitative",
+      "title": "Population Growth Rate",
+      "axis": {"format": ".1%"},
+      "scale": {"domain": [-0.016, 0.045]}
+    },
+    "y": {
+      "field": "gdp_growth_rate",
+      "type": "quantitative",
+      "title": "GDP Growth Rate",
+      "axis": {"format": ".1%"},
+       "scale": {"domain": [-0.26, 0.3]}
+    },
+    "color": {
+      "field": "Country Name",
+      "type": "nominal",
+      "title": "Country"
+    },
+    "size": {
+      "field": "gdp_per_capita",
+      "type": "quantitative",
+      "title": "GDP per Capita",
+      "scale": {"range": [50, 2000]}
+    },
+    "tooltip": [
+      {"field": "Country Name", "type": "nominal"},
+      {"field": "pop_growth_rate", "type": "quantitative", "title": "Population Growth", "format": ".2%"},
+      {"field": "gdp_growth_rate", "type": "quantitative", "title": "GDP Growth", "format": ".2%"},
+      {"field": "gdp_per_capita", "type": "quantitative", "title": "GDP per Capita", "format": "$,.0f"}
+    ]
+  },
+  "config": {}
+}
+

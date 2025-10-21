@@ -1,0 +1,70 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "ASEAN GDP per Capita Ranking (2024)",
+  "width": 800,
+  "data": {
+    "url": "https://raw.githubusercontent.com/henryma0722/3179c2/main/data/merged_economic_data.csv"
+  },
+  "transform": [
+    {
+      "filter": "datum['Country Name'] == 'Malaysia' || datum['Country Name'] == 'Thailand' || datum['Country Name'] == 'Singapore' || datum['Country Name'] == 'Indonesia' || datum['Country Name'] == 'Philippines' || datum['Country Name'] == 'Myanmar' || datum['Country Name'] == 'Cambodia' || datum['Country Name'] == 'Laos' || datum['Country Name'] == 'Brunei Darussalam'"
+    },
+    {
+      "calculate": "datum.GDP_2024 / datum.POP_2024",
+      "as": "GDP_per_capita"
+    },
+    {
+      "filter": "datum.GDP_per_capita > 0"
+    }
+  ],
+  "mark": "bar",
+  "encoding": {
+    "y": {
+      "field": "Country Name",
+      "type": "nominal",
+      "title": "Country",
+      "sort": "-x"
+    },
+    "x": {
+      "field": "GDP_per_capita",
+      "type": "quantitative",
+      "title": "GDP per Capita (US$)",
+      "axis": {
+        "format": "$,.0f"
+      }
+    },
+    "color": {
+      "field": "GDP_per_capita",
+      "type": "quantitative",
+      "title": "GDP per Capita",
+      "scale": {
+        "scheme": "viridis"
+      }
+    },
+    "tooltip": [
+      {
+        "field": "Country Name",
+        "type": "nominal"
+      },
+      {
+        "field": "GDP_per_capita",
+        "type": "quantitative",
+        "title": "GDP per Capita",
+        "format": "$,.2f"
+      },
+      {
+        "field": "GDP_2024",
+        "type": "quantitative",
+        "title": "Total GDP",
+        "format": "$,.0f"
+      },
+      {
+        "field": "POP_2024",
+        "type": "quantitative",
+        "title": "Population",
+        "format": ",.0f"
+      }
+    ]
+  },
+  "config": {}
+}
