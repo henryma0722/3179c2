@@ -29,7 +29,7 @@
   "mark": {
     "type": "line",
     "point": true,
-    "color": "green"
+    "color": "red"
   },
   "encoding": {
     "x": {
@@ -71,4 +71,5 @@
     ]
   },
   "config": {}
+
 }
