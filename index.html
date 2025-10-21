@@ -20,14 +20,17 @@
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:'Source Sans Pro',sans-serif;background:#f8f9fa;color:#333;line-height:1.6}
-    .page{max-width:1200px;margin:0 auto;padding:20px}
+    /* Page is now wider */
+    .page{max-width:1600px;margin:0 auto;padding:20px}
     .header{text-align:center;margin-bottom:30px;padding-bottom:20px;border-bottom:1px solid #e0e0e0}
     .header h1{font-family:'Merriweather',serif;font-size:2.5rem;font-weight:900;color:#2c3e50;margin-bottom:10px}
     .header p{font-family:'Source Sans Pro',sans-serif;font-size:1.1rem;color:#7f8c8d;max-width:800px;margin:0 auto}
-    .section{margin-bottom:40px;background:#fff;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.05);padding:25px}
-    .section-title{font-family:'Merriweather',serif;font-size:1.8rem;font-weight:700;color:#2c3e50;margin-bottom:15px;padding-bottom:10px;border-bottom:2px solid #3498db}
-    .section-description{font-family:'Source Sans Pro',sans-serif;color:#555;margin-bottom:20px;font-size:1rem}
-    /* Added a sub-title style for individual map headings */
+    /* Sections are now left-aligned */
+    .section{margin-bottom:40px;background:#fff;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.05);padding:25px;text-align:left}
+    /* Section titles remain centered */
+    .section-title{font-family:'Merriweather',serif;font-size:1.8rem;font-weight:700;color:#2c3e50;margin-bottom:15px;padding-bottom:10px;border-bottom:2px solid #3498db;text-align:center}
+    /* Descriptions are now left-aligned */
+    .section-description{font-family:'Source Sans Pro',sans-serif;color:#555;margin-bottom:20px;font-size:1rem;text-align:left}
     .map-subtitle {
         font-family: 'Merriweather', serif;
         font-size: 1.4rem;
@@ -36,6 +39,7 @@
         margin-top: 25px;
         margin-bottom: 10px;
     }
+    /* Vis containers are centered within the left-aligned section */
     .vis-container{width:100%;margin:0 auto}
     .footer{text-align:center;margin-top:40px;padding-top:20px;border-top:1px solid #e0e0e0;color:#7f8c8d;font-size:.9rem}
     .data-source{font-style:italic;margin-top:10px;font-size:.85rem}
@@ -43,72 +47,240 @@
     .vega-embed summary, .vega-embed .vega-embed__title {
       font-family: 'Merriweather', serif !important;
     }
+
+    /* --- CSS FOR INSIGHT PANELS --- */
+    .vis-with-insight {
+      margin-top: 20px;
+    }
+    .vis-column {
+      padding-right: 20px;
+    }
+    .insight-column {
+      padding-left: 20px;
+      border-left: 2px solid #eee;
+      /* Removed vertical centering to allow text to flow from top */
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start; 
+    }
+    .insight-text h3 { /* Titles are back */
+      font-family: 'Merriweather', serif;
+      font-weight: 700;
+      color: #333;
+      font-size: 1.2rem;
+    }
+    .insight-text p {
+      font-family: 'Source Sans Pro', sans-serif;
+      font-size: 1rem;
+      color: #444;
+      line-height: 1.7;
+      margin-top: 15px;
+    }
+    .insight-text p strong {
+      color: #2c3e50;
+    }
+    /* On mobile, stack columns and remove border */
+    @media (max-width: 992px) {
+      .vis-column {
+        padding-right: 0;
+      }
+      .insight-column {
+        padding-left: 0;
+        border-left: none;
+        border-top: 2px solid #eee;
+        margin-top: 20px;
+        padding-top: 20px;
+      }
+    }
+    /* --- END OF INSIGHT CSS --- */
+
     @media(max-width:768px){.page{padding:10px}.header h1{font-size:2rem}.section{padding:15px}.section-title{font-size:1.5rem}}
     
-    /* --- THIS IS THE CORRECTED LINE --- */
-    /* The min-height now only applies to the larger charts */
-    #vis1, #vis-gdp, #vis-pop, #vis2, #vis3 {min-height:360px}
+    /* The min-height applies to all large charts */
+    #vis1, #vis-gdp, #vis-pop, #vis2, #vis-scatter, #vis-rank, #vis3 {min-height:360px}
   </style>
 </head>
 <body>
   <div class="page">
     <div class="header">
       <h1>Is Malaysia’s Economic Growth Keeping Up with Its Neighbours?</h1>
-      <p>This dashboard presents an interactive analysis of global economic indicators, </p>
-      <p>including GDP distribution and economic performance across countries and continents. </p>
+      <p>This dashboard presents an interactive analysis of global economic indicators,<br>
+      including GDP distribution and economic performance across countries and continents. </p>
     </div>
 
     <!-- SECTION 1: Three maps -->
-    <div class="section" style="text-align:center">
+    <div class="section">
       <h2 class="section-title">Global Economic & Population Overview</h2>
 
       <!-- Map 1: GDP per Capita (Original) -->
-      <p class="section-description">This map shows GDP per capita (total GDP divided by population).<br> Countries in gray indicate missing data.</p>
-      <div id="vis1" class="vis-container"></div>
+      <div class="pure-g vis-with-insight">
+        <div class="pure-u-1 pure-u-lg-3-4 vis-column">
+          <p class="section-description">This map shows GDP per capita (total GDP divided by population).<br> Countries in gray indicate missing data.</p>
+          <div id="vis1" class="vis-container"></div>
+        </div>
+        <div class="pure-u-1 pure-u-lg-1-4 insight-column">
+          <div class="insight-text">
+            <p>The world map of GDP per capita reveals stark global inequalities.<br> Developed nations show high prosperity, while many countries in Africa<br> and Asia face significant economic challenges.</p>
+            <p><strong>How effective have global policies been in closing this gap?</strong></p>
+          </div>
+        </div>
+      </div>
 
       <!-- Map 2: Total GDP (New) -->
-      <!-- Added inline style to reduce spacing -->
-      <p class="section-description" style="margin-top: 30px; margin-bottom: 5px;">This map shows the total GDP for each country.</p>
-      <div id="vis-gdp" class="vis-container"></div>
+      <div class="pure-g vis-with-insight">
+        <div class="pure-u-1 pure-u-lg-3-4 vis-column">
+          <p class="section-description" style="margin-top: 30px; margin-bottom: 5px;">This map shows the total GDP for each country.</p>
+          <div id="vis-gdp" class="vis-container"></div>
+        </div>
+        <div class="pure-u-1 pure-u-lg-1-4 insight-column">
+          <div class="insight-text">
+            <p>This map shows total economic output (GDP). Unsurprisingly,<br> large economies like the USA and China dominate.<br> This view can be misleading, as a large GDP doesn't always<br> mean a wealthy population.</p>
+            <p><strong>Note India's high GDP but low GDP per capita.</strong></p>
+          </div>
+        </div>
+      </div>
 
       <!-- Map 3: Total Population (New) -->
-      <!-- Added inline style to reduce spacing -->
-      <p class="section-description" style="margin-top: 30px; margin-bottom: 5px;">This map shows the total population for each country.</p>
-      <div id="vis-pop" class="vis-container"></div>
+      <div class="pure-g vis-with-insight">
+        <div class="pure-u-1 pure-u-lg-3-4 vis-column">
+          <p class="section-description" style="margin-top: 30px; margin-bottom: 5px;">This map shows the total population for each country.</p>
+          <div id="vis-pop" class="vis-container"></div>
+        </div>
+        <div class="pure-u-1 pure-u-lg-1-4 insight-column">
+          <div class="insight-text">
+            <p>Visualizing total population shows where the world's people live.<br> China and India are the clear giants. This map provides critical<br> context for the other two visualizations.</p>
+            <p><strong>How will demographic shifts reshape the global economy?</strong></p>
+          </div>
+        </div>
+      </div>
     </div>
     <!-- END OF SECTION 1 -->
 
-    <div class="section" style="text-align:center">
-      <h2 class="section-title">How do ASEAN countries balance population size and total GDP?</h2>
-      <p class="section-description">This interactive scatter plot explores the relationship between population and economic output.<br> Use the filters to analyze specific continents or income levels.<br> Circle size represents total GDP.</p>
-      <div id="vis2" class="vis-container"></div>
-    </div>
+    <!-- SECTION 2: Three charts -->
+    <div class="section">
+      <h2 class="section-title">How do ASEAN countries compare?</h2>
+      
+      <!-- Chart 1: Gdp_interactive.vg.json -->
+      <div class="pure-g vis-with-insight">
+        <div class="pure-u-1 pure-u-lg-3-4 vis-column">
+          <p class="section-description">This interactive scatter plot explores the relationship between population<br> and economic output. Circle size represents total GDP.</p>
+          <div id="vis2" class="vis-container"></div>
+        </div>
+        <div class="pure-u-1 pure-u-lg-1-4 insight-column">
+          <div class="insight-text">
+            <p>There is a clear divide in the ASEAN economic landscape:<br> Singapore and Brunei have high GDP per capita with small populations,<br> while Indonesia and the Philippines are heavyweights due to size.</p>
+            <p><strong>This highlights two different paths to economic power.</strong></p>
+          </div>
+        </div>
+      </div>
 
-    <!-- UPDATED SECTION 3: Now contains three line charts -->
-    <div class="section" style="text-align:center">
+      <!-- Chart 2: scatter.vg.json (New) -->
+      <div class="pure-g vis-with-insight">
+        <div class="pure-u-1 pure-u-lg-3-4 vis-column">
+          <p class="section-description" style="margin-top: 30px; margin-bottom: 5px;">This scatter plot examines the balance between economic and demographic<br> expansion over time. Use the slider to select a year.</p>
+          <div id="vis-scatter" class="vis-container"></div>
+        </div>
+        <div class="pure-u-1 pure-u-lg-1-4 insight-column">
+          <div class="insight-text">
+            <p>By plotting economic growth against population growth,<br> we see which countries are "outrunning" their demographics.<br> The slider reveals volatility from the 2008 and 2020 crises.</p>
+            <p><strong>Which countries have been most resilient to these shocks?</strong></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart 3: gdp_per_capita_rank.vg.json (New) -->
+      <div class="pure-g vis-with-insight">
+        <div class="pure-u-1 pure-u-lg-3-4 vis-column">
+          <p class="section-description" style="margin-top: 30px; margin-bottom: 5px;">This bar chart provides a direct comparison of GDP per capita<br> for the most recent year.</p>
+          <div id="vis-rank" class="vis-container"></div>
+        </div>
+        <div class="pure-u-1 pure-u-lg-1-4 insight-column">
+          <div class="insight-text">
+            <p>This ranking makes the disparity within ASEAN undeniable.<br> Singapore is in a league of its own, with Malaysia and Thailand<br> forming a middle group.</p>
+            <p><strong>As you move the slider, who is closing the gap?</strong></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- END OF SECTION 2 -->
+
+    <!-- SECTION 3: Malaysia Focus -->
+    <div class="section">
       <h2 class="section-title">Is Malaysia’s economic growth keeping pace with population growth?</h2>
       
-      <!-- Chart 1: Multiple Line Chart -->
-      <p class="section-description">This multi-line chart tracks GDP per capita growth across ASEAN countries,<br> highlighting Malaysia's trajectory compared to regional peers. </p>
-      <p class="section-description">Vertical lines mark major economic disruptions: the 2009 Global Financial Crisis and 2020 COVID-19 pandemic.</p>
-      <div id="vis3" class="vis-container"></div>
+      <!-- Chart 1: Multiple Line Chart  -->
+      <div class="pure-g vis-with-insight">
+        <div class="pure-u-1 pure-u-lg-3-4 vis-column">
+          <p class="section-description">This multi-line chart tracks GDP per capita growth across ASEAN countries,<br> highlighting Malaysia's trajectory compared to regional peers. 
+          <br>Vertical lines mark the 2009 and 2020 economic crises.</p>
+          <div id="vis3" class="vis-container"></div>
+        </div>
+        <div class="pure-u-1 pure-u-lg-1-4 insight-column">
+          <div class="insight-text">
+            <p>This chart tells the story of ASEAN's economic journey.<br> We see the impact of the 2009 and 2020 crises. Some countries,<br> like Vietnam, show remarkable resilience and recovery.</p>
+            <p><strong>What policies allowed some nations to recover faster?</strong></p>
+          </div>
+        </div>
+      </div>
 
-      <!-- Chart 2: Malaysia GDP vs Population (New) -->
-      <!-- Added inline style to reduce spacing -->
-      <p class="section-description" style="margin-top: 30px; margin-bottom: 5px;">This chart focuses on Malaysia, comparing its total GDP growth to its population growth over time.</p>
-      <div id="vis-mys-gdp-pop" class="vis-container"></div>
+      <!-- Chart 2: Malaysia GDP -->
+      <div class="pure-g vis-with-insight">
+        <div class="pure-u-1 pure-u-lg-3-4 vis-column">
+          <p class="section-description" style="margin-top: 30px; margin-bottom: 5px;">This chart focuses on Malaysia's total GDP growth over time.</p>
+          <div id="vis-mys-gdp-pop" class="vis-container"></div>
+        </div>
+        <div class="pure-u-1 pure-u-lg-1-4 insight-column">
+          <div class="insight-text">
+            <p>This chart isolates Malaysia's economic engine.<br> The line shows consistent growth, confirming its strong<br> upper-middle-income status. Dips in 2009 and 2020 are clear.</p>
+            <p><strong>This chart shows *what* happened, but *why*?</strong></p>
+          </div>
+        </div>
+      </div>
       
-      <!-- Chart 3: Malaysia Population (New) -->
-      <!-- Added inline style to reduce spacing -->
-      <p class="section-description" style="margin-top: 30px; margin-bottom: 5px;">This chart shows the growth of Malaysia's population from 2000 to 2024.</p>
-      <div id="vis-mys-pop" class="vis-container"></div>
-
+      <!-- Chart 3: Malaysia Population -->
+      <div class="pure-g vis-with-insight">
+        <div class="pure-u-1 pure-u-lg-3-4 vis-column">
+          <p class="section-description" style="margin-top: 30px; margin-bottom: 5px;">This chart shows the growth of Malaysia's population from 2000 to 2024.</p>
+          <div id="vis-mys-pop" class="vis-container"></div>
+        </div>
+        <div class="pure-u-1 pure-u-lg-1-4 insight-column">
+          <div class="insight-text">
+            <p>This chart shows Malaysia's steady, predictable population growth.<br> Unlike the volatile GDP line, the population increases at a stable rate.<br> The economy has (mostly) grown much faster than its population.</p>
+          </div>
+        </div>
+      </div>
+          
     </div>
-    <!-- END OF UPDATED SECTION 3 -->
+    <!-- END OF SECTION 3 -->
+
+    <!-- CONCLUSION SECTION -->
+    <div class="section" >
+      <h2 class="section-title">Conclusion</h2>
+      <p class="section-description" style="text-align: center; max-width: 1200px; margin-left: auto; margin-right: auto;">
+      This dashboard provides a multifaceted view of Malaysia's economic standing,<br> both globally and within the ASEAN region. 
+      The visualizations highlight that while<br> Malaysia is a strong upper-middle-income nation, it faces distinct challenges. 
+      <br>Globally, the divide between developed and developing nations remains vast. 
+      <br>Regionally, Malaysia navigates a complex landscape, positioned between<br> high-value economies like Singapore and large-scale, high-growth nations.
+      </p>
+      <p class="section-description" style="text-align: center; max-width: 1200px; margin-left: auto; margin-right: auto;">
+      The data shows Malaysia's economic growth has consistently outpaced<br> its steady population growth, leading to a rising GDP per capita. 
+      <br>However, like its neighbours, it remains vulnerable to global economic shocks.<br> The key takeaway is that Malaysia's future prosperity will depend on 
+      <br>its ability to maintain resilience, foster high-value growth, and navigate<br> the competitive dynamics of a rapidly evolving region.
+      </p>
+    </div>
+    <!-- END OF CONCLUSION SECTION -->
 
     <div class="footer">
       <p>&copy; 2025 FIT3179 Data Visualisation | Created by Henry Ma</p>
-      <p class="data-source">Data Source: World Bank Open Data | Visualisation created with Vega-Lite</p>
+      <p class="data-source">
+        Data Sources: 
+        <a href="https://data.worldbank.org/indicator/NY.GDP.MKTP.CD" target="_blank">GDP (current US$)</a> | 
+        <a href="https://data.worldbank.org/indicator/NY.GDP.PCAP.CD" target="_blank">GDP per capita (current US$)</a> | 
+        <a href="https://data.worldbank.org/indicator/SP.POP.TOTL" target="_blank">Population, total</a> | 
+        <a href="https://www.kaggle.com/datasets/hserdaraltan/countries-by-continent" target="_blank">Countries by Continent</a>
+        <br>
+        Visualisation created with Vega-Lite
+      </p>
     </div>
   </div>
 
@@ -121,20 +293,26 @@
       // URLs for all visualizations
       const specVis1Url = baseUrl + "empty_data_map.vg.json";
       const specVisGdpUrl = baseUrl + "gdp_map.vg.json";
-      const specVisPopUrl = baseUrl + "pop_map.vg.json"; 
-      
+      const specVisPopUrl = baseUrl + "pop_map.vg.json";
+
       const specVis2Url = baseUrl + "Gdp_interactive.vg.json";
+      const specVisScatterUrl = baseUrl + "scatter.vg.json";
+      const specVisRankUrl = baseUrl + "gdp_per_capita_rank.vg.json";
 
       const specVis3Url = baseUrl + "multiple_line.vg.json";
-      const specVisMysGdpPopUrl = baseUrl + "mys_gdp.vg.json"; // Changed from mys_gdp_pop.vg.json
-      const specVisMysPopUrl = baseUrl + "mys_pop.vg.json"; 
+      const specVisMysGdpPopUrl = baseUrl + "mys_gdp.vg.json";
+      const specVisMysPopUrl = baseUrl + "mys_pop.vg.json";
 
       // Embed all charts
       await Promise.all([
         vegaEmbed('#vis1', specVis1Url, { actions: false }),
         vegaEmbed('#vis-gdp', specVisGdpUrl, { actions: false }),
         vegaEmbed('#vis-pop', specVisPopUrl, { actions: false }),
+        
         vegaEmbed('#vis2', specVis2Url, { actions: false }),
+        vegaEmbed('#vis-scatter', specVisScatterUrl, { actions: false }),
+        vegaEmbed('#vis-rank', specVisRankUrl, { actions: false }),
+
         vegaEmbed('#vis3', specVis3Url, { actions: false }),
         vegaEmbed('#vis-mys-gdp-pop', specVisMysGdpPopUrl, { actions: false }),
         vegaEmbed('#vis-mys-pop', specVisMysPopUrl, { actions: false })
