@@ -50,7 +50,7 @@
         {
           "transform": [
             {
-              "lookup": "properties.ISO_A3",
+              "lookup": "properties.ISO_A3_EH",
               "from": {
                 "data": {
                   "url": "https://raw.githubusercontent.com/henryma0722/3179c2/main/data/merged_economic_data.csv"
@@ -72,7 +72,7 @@
         {
           "transform": [
             {
-              "lookup": "properties.ISO_A3",
+              "lookup": "properties.ISO_A3_EH",
               "from": {
                 "data": {
                   "url": "https://raw.githubusercontent.com/henryma0722/3179c2/main/data/merged_economic_data.csv",
@@ -112,10 +112,10 @@
               "field": "current_gdp_per_capita",
               "type": "quantitative",
               "scale": {
-                "type": "threshold",
-                "domain": [500, 1000, 5000, 10000, 30000],
-                "range": ["#fee5d9", "#fdbe85", "#fd8d3c", "#e6550d", "#a63603", "#662506"]
-              },
+              "type": "threshold",
+              "domain": [500, 1000, 5000, 10000, 30000, 50000],
+              "scheme": "oranges"
+            },
               "title": "GDP per Capita (US$)"
             },
             "tooltip": [
@@ -123,8 +123,7 @@
               {"field": "economic_data.Continent", "type": "nominal", "title": "Continent"},
               {"field": "current_gdp", "type": "quantitative", "title": "GDP", "format": "$,.0f"},
               {"field": "current_pop", "type": "quantitative", "title": "Population", "format": ",.0f"},
-              {"field": "current_gdp_per_capita", "type": "quantitative", "title": "GDP per Capita", "format": "$,.2f"},
-              {"field": "year", "type": "quantitative", "title": "Year"}
+              {"field": "current_gdp_per_capita", "type": "quantitative", "title": "GDP per Capita", "format": "$,.2f"}
             ]
           }
         }
