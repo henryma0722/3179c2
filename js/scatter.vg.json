@@ -1,7 +1,7 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "title": "GDP vs Population Growth Rate",
-  "width": 800,
+  "width": 1240,
   "height": 500,
   "data": {
     "url": "https://raw.githubusercontent.com/henryma0722/3179c2/main/data/merged_economic_data.csv"
