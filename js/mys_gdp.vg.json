@@ -1,0 +1,74 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Malaysia's Gross Domestic Product (2000-2024)",
+  "width": 800,
+  "height": 170,
+  "data": {
+    "url": "https://raw.githubusercontent.com/henryma0722/3179c2/main/data/merged_economic_data.csv"
+  },
+  "transform": [
+    {
+      "filter": "datum['Country Name'] == 'Malaysia'"
+    },
+    {
+      "fold": [
+        "GDP_2000", "GDP_2001", "GDP_2002", "GDP_2003", "GDP_2004", "GDP_2005", "GDP_2006", "GDP_2007", "GDP_2008", "GDP_2009",
+        "GDP_2010", "GDP_2011", "GDP_2012", "GDP_2013", "GDP_2014", "GDP_2015", "GDP_2016", "GDP_2017", "GDP_2018", "GDP_2019",
+        "GDP_2020", "GDP_2021", "GDP_2022", "GDP_2023", "GDP_2024"
+      ],
+      "as": ["key", "Value"]
+    },
+    {
+      "calculate": "+split(datum.key, '_')[1]",
+      "as": "Year"
+    },
+    {
+      "filter": "datum.Value > 0"
+    }
+  ],
+  "mark": {
+    "type": "line",
+    "point": true,
+    "color": "green"
+  },
+  "encoding": {
+    "x": {
+      "field": "Year",
+      "type": "quantitative",
+      "axis": {
+        "format": "d"
+      }
+    },
+    "y": {
+      "field": "Value",
+      "type": "quantitative",
+      "title": "GDP (US$)",
+      "scale": {
+        "type": "log"
+      },
+      "axis": {
+        "format": ".0s",
+        "values": [
+          100000000000,
+          200000000000,
+          300000000000,
+          400000000000
+        ]
+      }
+    },
+    "tooltip": [
+      {
+        "field": "Year",
+        "type": "quantitative",
+        "format": "d"
+      },
+      {
+        "field": "Value",
+        "type": "quantitative",
+        "title": "GDP (US$)",
+        "format": "$,.0f"
+      }
+    ]
+  },
+  "config": {}
+}

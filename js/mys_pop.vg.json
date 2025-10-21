@@ -1,0 +1,74 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Malaysia's Population (2000-2024)",
+  "width": 800,
+  "height": 90,
+  "data": {
+    "url": "https://raw.githubusercontent.com/henryma0722/3179c2/main/data/merged_economic_data.csv"
+  },
+  "transform": [
+    {
+      "filter": "datum['Country Name'] == 'Malaysia'"
+    },
+    {
+      "fold": [
+        "POP_2000", "POP_2001", "POP_2002", "POP_2003", "POP_2004", "POP_2005", "POP_2006", "POP_2007", "POP_2008", "POP_2009",
+        "POP_2010", "POP_2011", "POP_2012", "POP_2013", "POP_2014", "POP_2015", "POP_2016", "POP_2017", "POP_2018", "POP_2019",
+        "POP_2020", "POP_2021", "POP_2022", "POP_2023", "POP_2024"
+      ],
+      "as": ["key", "Value"]
+    },
+    {
+      "calculate": "+split(datum.key, '_')[1]",
+      "as": "Year"
+    },
+    {
+      "filter": "datum.Value > 0"
+    }
+  ],
+  "mark": {
+    "type": "line",
+    "point": true,
+    "color": "green"
+  },
+  "encoding": {
+    "x": {
+      "field": "Year",
+      "type": "quantitative",
+      "axis": {
+        "format": "d"
+      }
+    },
+    "y": {
+      "field": "Value",
+      "type": "quantitative",
+      "title": "GDP (US$)",
+      "scale": {
+        "type": "log"
+      },
+      "axis": {
+        "format": ".0s",
+        "values": [
+          10000000,
+          20000000,
+          30000000,
+          40000000
+        ]
+      }
+    },
+    "tooltip": [
+      {
+        "field": "Year",
+        "type": "quantitative",
+        "format": "d"
+      },
+      {
+        "field": "Value",
+        "type": "quantitative",
+        "title": "GDP (US$)",
+        "format": "$,.0f"
+      }
+    ]
+  },
+  "config": {}
+}
