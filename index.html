@@ -42,111 +42,50 @@
 <body>
   <div class="page">
     <div class="header">
-      <h1>Global Economic Data Analysis</h1>
-      <p>This dashboard presents an interactive analysis of global economic indicators, including GDP distribution and economic performance across countries and continents.</p>
+      <h1>Is Malaysia’s Economic Growth Keeping Up with Its Neighbours?</h1>
+      <p>This dashboard presents an interactive analysis of global economic indicators, </p>
+      <p>including GDP distribution and economic performance across countries and continents. </p>
     </div>
 
-    <div class="section">
+    <div class="section" style="text-align:center">
       <h2 class="section-title">Global GDP per Capita Distribution (2022)</h2>
-      <p class="section-description">This choropleth map shows GDP per capita across countries, normalized by population. Countries in gray indicate missing data. Use the tooltips for detailed information.</p>
+      <p class="section-description">This choropleth map shows GDP per capita across countries,<br> normalized by population. Countries in gray indicate missing data.<br> Use the tooltips for detailed information.</p>
       <div id="vis1" class="vis-container"></div>
     </div>
 
-    <div class="section">
-      <h2 class="section-title">Economic Analysis: GDP per Capita vs Population</h2>
-      <p class="section-description">This interactive scatter plot explores the relationship between population size and economic prosperity. Use the filters to analyze specific continents or income levels. Circle size represents total GDP.</p>
+    <div class="section" style="text-align:center">
+      <h2 class="section-title">How do ASEAN countries balance population size and total GDP?</h2>
+      <p class="section-description">This interactive scatter plot explores the relationship between population and economic output.<br> Use the filters to analyze specific continents or income levels.<br> Circle size represents total GDP.</p>
       <div id="vis2" class="vis-container"></div>
     </div>
 
-    <div class="section">
-      <h2 class="section-title">ASEAN Economic Development Trends (2000-2024)</h2>
-      <p class="section-description">This multi-line chart tracks GDP per capita growth across ASEAN countries, highlighting Malaysia's trajectory compared to regional peers. Key insights:</p>
+    <div class="section" style="text-align:center">
+      <h2 class="section-title">Is Malaysia’s economic growth keeping pace with population growth?</h2>
+      <p class="section-description">This multi-line chart tracks GDP per capita growth across ASEAN countries,<br> highlighting Malaysia's trajectory compared to regional peers. </p>
       <ul class="section-description" style="margin-left: 20px;">
-        <li><strong>Singapore</strong> = small population, massive GDP per capita</li>
-        <li><strong>Indonesia</strong> = huge population, large GDP, moderate per capita</li>
-        <li><strong>Malaysia</strong> = moderate population and GDP — between developing and developed peers</li>
       </ul>
       <p class="section-description">Vertical lines mark major economic disruptions: the 2009 Global Financial Crisis and 2020 COVID-19 pandemic.</p>
       <div id="vis3" class="vis-container"></div>
     </div>
 
     <div class="footer">
-      <p>&copy; 2025 FITS179 Data Visualisation | Created by Henry Ma</p>
+      <p>&copy; 2025 FIT3179 Data Visualisation | Created by Henry Ma</p>
       <p class="data-source">Data Source: World Bank Open Data | Visualisation created with Vega-Lite</p>
     </div>
   </div>
 
   <script>
-    /***************************************************************
-     * Helper: show errors in the visualization container
-     ***************************************************************/
-    function showPageError(containerSelector, message) {
-      const el = document.querySelector(containerSelector);
-      if (!el) return;
-      el.innerHTML = `<div style="padding:16px;border-radius:6px;background:#fdecea;border:1px solid #f5c6cb;color:#c0392b">
-          <strong>Error:</strong><div style="margin-top:8px">${message}</div>
-        </div>`;
-    }
-
-    /***************************************************************
-     * Embed all specs using vegaEmbed with helpful error handling
-     ***************************************************************/
+    // Embed all specs without error handling
     (async function embedAll() {
-      if (typeof vegaEmbed !== 'function') {
-        const msg = 'vegaEmbed is not available. Confirm vega, vega-lite and vega-embed scripts are loaded.';
-        console.error(msg);
-        showPageError('#vis1', msg);
-        showPageError('#vis2', msg);
-        showPageError('#vis3', msg);
-        return;
-      }
-
-      // Update these paths to match your GitHub repository structure
       const specVis1Url = "https://raw.githubusercontent.com/henryma0722/3179c2/main/js/empty_data_map.vg.json";
       const specVis2Url = "https://raw.githubusercontent.com/henryma0722/3179c2/main/js/Gdp_interactive.vg.json";
       const specVis3Url = "https://raw.githubusercontent.com/henryma0722/3179c2/main/js/multiple_line.vg.json";
 
-      // try embed spec1
-      try {
-        const response = await fetch(specVis1Url);
-        if (!response.ok) {
-          throw new Error(`Failed to load map visualization: ${response.status} ${response.statusText}`);
-        }
-        const specVis1 = await response.json();
-        await vegaEmbed('#vis1', specVis1, {actions: false});
-        console.log('specVis1 embedded');
-      } catch (err) {
-        console.error('Failed to embed specVis1:', err);
-        showPageError('#vis1', `Failed to render map: ${err.message || err}`);
-      }
-
-      // try embed spec2
-      try {
-        const response = await fetch(specVis2Url);
-        if (!response.ok) {
-          throw new Error(`Failed to load scatter plot visualization: ${response.status} ${response.statusText}`);
-        }
-        const specVis2 = await response.json();
-        await vegaEmbed('#vis2', specVis2, {actions: false});
-        console.log('specVis2 embedded');
-      } catch (err) {
-        console.error('Failed to embed specVis2:', err);
-        showPageError('#vis2', `Failed to render scatter plot: ${err.message || err}`);
-      }
-
-      // try embed spec3 (ASEAN line chart)
-      try {
-        const response = await fetch(specVis3Url);
-        if (!response.ok) {
-          throw new Error(`Failed to load ASEAN trends visualization: ${response.status} ${response.statusText}`);
-        }
-        const specVis3 = await response.json();
-        await vegaEmbed('#vis3', specVis3, {actions: false});
-        console.log('specVis3 embedded');
-      } catch (err) {
-        console.error('Failed to embed specVis3:', err);
-        showPageError('#vis3', `Failed to render ASEAN trends chart: ${err.message || err}`);
-      }
+      await Promise.all([
+        vegaEmbed('#vis1', specVis1Url, { actions: false }),
+        vegaEmbed('#vis2', specVis2Url, { actions: false }),
+        vegaEmbed('#vis3', specVis3Url, { actions: false })
+      ]);
     })();
   </script>
 </body>
